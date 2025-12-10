@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model categories {
+  id         BigInt   @id @default(autoincrement())
+  name       String   @unique
+  created_at DateTime @default(now())
+
+  products   products[]
+}
+
+model products {
+  id           String   @id @default(uuid())
+  name         String
+  description  String?
+  price        Decimal  @db.Decimal(10, 2)
+  image_url    String
+  category_id  BigInt?
+  stock_status String   @default("in_stock")
+  is_new       Boolean  @default(false)
+  created_at   DateTime @default(now())
+
+  category     categories? @relation(fields: [category_id], references: [id])
+}
